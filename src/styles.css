@@ -17,3 +17,7 @@ body {
 .spacer {
   flex: 1 1 auto;
 }
+
+.hero-card {
+  margin-bottom: 20px;
+}
