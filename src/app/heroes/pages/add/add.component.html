@@ -46,10 +46,22 @@
     </mat-form-field>
     <br />
 
-    <button mat-raised-button color="primary" (click)="submit()">
-      <mat-icon>edit</mat-icon>
-      Submit
-    </button>
+    <div fxLayout>
+      <button mat-raised-button color="primary" (click)="submit()">
+        <mat-icon>edit</mat-icon>
+        Submit
+      </button>
+      <span class="spacer"></span>
+      <button
+        mat-raised-button
+        color="warn"
+        *ngIf="hero.id"
+        (click)="deleteHero()"
+      >
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </div>
   </div>
 
   <div fxFlex="50">
