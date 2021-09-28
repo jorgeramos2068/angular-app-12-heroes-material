@@ -30,6 +30,9 @@ export class AddComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    if (!this.router.url.includes('edit')) {
+      return;
+    }
     this.activatedRoute.params
       .pipe(switchMap(({ id }) => this.heroesService.getHero(id)))
       .subscribe({
