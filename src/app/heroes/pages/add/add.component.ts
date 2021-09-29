@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { switchMap } from 'rxjs/operators';
+
 import { Hero, Publisher } from '../../interfaces/hero.interface';
 import { HeroesService } from '../../services/heroes.service';
+import { ConfirmComponent } from '../../components/confirm/confirm.component';
 
 @Component({
   selector: 'app-add',
@@ -26,7 +30,9 @@ export class AddComponent implements OnInit {
   constructor(
     private heroesService: HeroesService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +56,7 @@ export class AddComponent implements OnInit {
       // Update
       this.heroesService.updateHero(this.hero).subscribe({
         next: (resp) => {
-          console.log('Updated:', resp);
+          this.showSnackBar(`${resp.superhero} updated`);
         },
       });
     } else {
@@ -58,18 +64,34 @@ export class AddComponent implements OnInit {
       this.heroesService.saveHero(this.hero).subscribe({
         next: (hero) => {
           this.router.navigate(['/heroes/edit', hero.id]);
-          console.log('Created:', hero);
+          this.showSnackBar('Hero has been created');
         },
       });
     }
   }
 
   deleteHero(): void {
-    this.heroesService.deleteHero(this.hero.id!).subscribe({
+    const localDialog = this.dialog.open(ConfirmComponent, {
+      width: '250px',
+      data: this.hero,
+    });
+    localDialog.afterClosed().subscribe({
       next: (resp) => {
-        console.log(resp);
-        this.router.navigate(['/heroes']);
+        if (resp) {
+          this.heroesService.deleteHero(this.hero.id!).subscribe({
+            next: (resp) => {
+              console.log(resp);
+              this.router.navigate(['/heroes']);
+            },
+          });
+        }
       },
+    });
+  }
+
+  showSnackBar(message: string): void {
+    this.snackBar.open(message, 'Ok', {
+      duration: 2000,
     });
   }
 }
