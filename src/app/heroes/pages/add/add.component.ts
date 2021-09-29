@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
 import { Hero, Publisher } from '../../interfaces/hero.interface';
@@ -75,18 +76,25 @@ export class AddComponent implements OnInit {
       width: '250px',
       data: this.hero,
     });
-    localDialog.afterClosed().subscribe({
-      next: (resp) => {
-        if (resp) {
-          this.heroesService.deleteHero(this.hero.id!).subscribe({
-            next: (resp) => {
-              console.log(resp);
-              this.router.navigate(['/heroes']);
-            },
-          });
-        }
-      },
-    });
+
+    localDialog
+      .afterClosed()
+      .pipe(
+        switchMap((resp) => {
+          if (resp) {
+            return this.heroesService.deleteHero(this.hero.id!);
+          } else {
+            return of(1);
+          }
+        })
+      )
+      .subscribe({
+        next: (resp) => {
+          if (resp !== 1) {
+            this.router.navigate(['/heroes']);
+          }
+        },
+      });
   }
 
   showSnackBar(message: string): void {
