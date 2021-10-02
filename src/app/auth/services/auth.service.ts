@@ -19,8 +19,13 @@ export class AuthService {
   }
 
   login(): Observable<Auth> {
-    return this.http
-      .get<Auth>(`${this.baseUrl}/users/1`)
-      .pipe(tap((auth) => (this._auth = auth)));
+    return this.http.get<Auth>(`${this.baseUrl}/users/1`).pipe(
+      tap((auth) => (this._auth = auth)),
+      tap((auth) => localStorage.setItem('heroesId', auth.id))
+    );
+  }
+
+  logout(): void {
+    this._auth = undefined;
   }
 }
