@@ -1,10 +1,20 @@
 # HeroesApp
 
+Angular application with hero records management and implementation of Angular Material.
+
+The project implements an example database that can be managed through Json Server.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.2.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+You must install `json-server` in order to run the simulation of the database.
+
+Once you have installed `json-server`, run the following command to initialize the backend server:
+
+`json-server --watch heroes-server/db.json --port 3002`
 
 ## Code scaffolding
 
