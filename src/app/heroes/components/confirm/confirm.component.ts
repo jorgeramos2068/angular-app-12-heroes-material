@@ -19,6 +19,6 @@ export class ConfirmComponent implements OnInit {
   }
 
   close(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 }
