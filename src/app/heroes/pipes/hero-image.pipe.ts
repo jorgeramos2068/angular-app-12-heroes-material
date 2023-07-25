@@ -5,7 +5,7 @@ import { Hero } from '../interfaces/hero.interface';
   name: 'heroImage',
 })
 export class HeroImagePipe implements PipeTransform {
-  transform(hero: Hero): unknown {
+  transform(hero: Hero): string {
     return hero.id ? `assets/heroes/${hero.id}.jpg` : 'assets/no-image.png';
   }
 }
